@@ -1,0 +1,36 @@
+{
+  "name": "deterministic-split",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "babel index.js -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jahredhope/deterministic-split.git"
+  },
+  "keywords": [
+    "split",
+    "ab testing",
+    "random",
+    "testing",
+    "a/b",
+    "ab",
+    "split-testing"
+  ],
+  "author": "Jahred Hope <jahredhope@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jahredhope/deterministic-split/issues"
+  },
+  "homepage": "https://github.com/jahredhope/deterministic-split#readme",
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "md5": "^2.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "jest": "^19.0.2"
+  }
+}
