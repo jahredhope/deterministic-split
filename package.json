@@ -20,7 +20,7 @@
     "split-testing"
   ],
   "author": "Jahred Hope <jahredhope@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jahredhope/deterministic-split/issues"
   },
