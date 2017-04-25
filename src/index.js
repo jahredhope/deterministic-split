@@ -4,6 +4,7 @@ module.exports = (value, buckets) => {
   if(value === undefined || value === null || !value.toString) {
     throw new TypeError('A value is required')
   }
+
   if(!buckets) {
     throw new TypeError('A list of options or number of options is required')
   }
@@ -20,8 +21,8 @@ module.exports = (value, buckets) => {
       }
     }
     if(typeof bucket === 'number') {
-      if (bucket % 1) {
-        throw new TypeError('Weights must be integers')
+      if (bucket % 1 || bucket < 0) {
+        throw new Error('Weights must be positive integers')
       }
       return {
         value: index,
@@ -29,8 +30,8 @@ module.exports = (value, buckets) => {
       }
     }
     if(typeof bucket === 'object') {
-      if ((bucket.weight || 0) % 1) {
-        throw new TypeError('Weights must be integers')
+      if ((bucket.weight || 0) % 1 || bucket.weight < 0) {
+        throw new Error('Weights must be positive integers')
       }
       return {
         value: bucket.value || index,
@@ -40,6 +41,10 @@ module.exports = (value, buckets) => {
     throw new Error(`Unable to understand passed in buckets of type ${typeof buckets}`)
   })
   const totalWeight = buckets.reduce((count, bucket) => bucket.weight + count, 0)
+
+  if(totalWeight === 0) {
+    throw new Error('Total weight must not be zero')
+  }
 
   const hash = md5(value.toString()).substr(0,8)
   const hashAsInt = parseInt("0x" + hash, 16)

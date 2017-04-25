@@ -17,7 +17,7 @@ describe('deterministic-split', () => {
     })
   })
 
-  it('is a function', () => {
+  it('should be a function', () => {
     expect(typeof deterministicSplit).toBe('function')
   })
 
@@ -119,5 +119,62 @@ describe('deterministic-split', () => {
     const resultOne = deterministicSplit('testValue', 5)
     const resultTwo = deterministicSplit('testValue', 5)
     expect(resultOne).toEqual(resultTwo)
+  })
+
+  describe('weight ratio', ()=> {
+      it('should honour the given ratios for weight', () => {
+         const errorAllowance = 0.95
+        const experienceCount = 2
+        const testCases = tenThousandStrings
+        let counts = {}
+        testCases
+          .map(value => deterministicSplit(value, [13, 4, 1]))
+          .forEach(result => counts[result] = counts[result] + 1 || 1)
+          expect(counts[0]).toBeGreaterThan(testCases.length * (13/18) * errorAllowance)
+          expect(counts[1]).toBeGreaterThan(testCases.length * (4/18) * errorAllowance)
+          expect(counts[2]).toBeGreaterThan(testCases.length * (1/18) * errorAllowance)
+      })
+      it('should honour the given ratios for weight (13, 4, 1)', () => {
+        const errorAllowance = 0.95
+        const testCases = tenThousandStrings
+        let counts = {}
+        testCases
+          .map(value => deterministicSplit(value, [13, 4, 1]))
+          .forEach(result => counts[result] = counts[result] + 1 || 1)
+          expect(counts[0]).toBeGreaterThan(testCases.length * (13/18) * errorAllowance)
+          expect(counts[1]).toBeGreaterThan(testCases.length * (4/18) * errorAllowance)
+          expect(counts[2]).toBeGreaterThan(testCases.length * (1/18) * errorAllowance)
+      })
+      it('should honour the given ratios for weight (1, 1, 1, 3)', () => {
+        const errorAllowance = 0.95
+        const testCases = tenThousandStrings
+        let counts = {}
+        testCases
+          .map(value => deterministicSplit(value, [1, 1, 1, 3]))
+          .forEach(result => counts[result] = counts[result] + 1 || 1)
+          expect(counts[0]).toBeGreaterThan(testCases.length * (1/6) * errorAllowance)
+          expect(counts[1]).toBeGreaterThan(testCases.length * (1/6) * errorAllowance)
+          expect(counts[2]).toBeGreaterThan(testCases.length * (1/6) * errorAllowance)
+          expect(counts[3]).toBeGreaterThan(testCases.length * (3/6) * errorAllowance)
+      })
+      it('should never assign to a zero weight (1, 0)', () => {
+        const testCases = tenThousandStrings
+        let counts = {}
+        testCases
+          .map(value => deterministicSplit(value, [1, 0]))
+          .forEach(result => counts[result] = counts[result] + 1 || 1)
+          expect(counts[0]).toEqual(testCases.length)
+          expect(counts[1]).toBeUndefined()
+      })
+      it('should never assign to a zero weight (0, 200, 300)', () => {
+        const testCases = tenThousandStrings
+        let counts = {}
+        testCases
+          .map(value => deterministicSplit(value, [0, 200, 300]))
+          .forEach(result => counts[result] = counts[result] + 1 || 1)
+          expect(counts[0]).toBeUndefined()
+          expect(counts[1]).toBeGreaterThan(0)
+          expect(counts[2]).toBeGreaterThan(0)
+      })
   })
 })
